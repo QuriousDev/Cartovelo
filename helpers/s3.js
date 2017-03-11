@@ -48,6 +48,7 @@ module.exports = {
             s3: s3,
             bucket: config.imageBucket,
             acl: 'public-read',
+            contentType: multerS3.AUTO_CONTENT_TYPE,
             key: function (req, file, cb) {
                 ext = mime.extension(file.mimetype)
                 name = uuid.v4() + "." + ext
