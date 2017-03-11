@@ -34,8 +34,7 @@ module.exports = {
     var params = {Bucket: config.roadBucket, Key: filename};
     s3.getObject(params, function(err, json_data) {
       if (!err) {
-        var json = JSON.parse(new Buffer(json_data.Body).toString("utf8"));
-        callback(json)
+        callback(json_data.Body)
       } else {
         callback("There was an error : " + err)
       }
