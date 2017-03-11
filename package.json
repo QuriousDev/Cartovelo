@@ -4,8 +4,10 @@
   "dependencies": {
     "aws-sdk": "^2.27.0",
     "body-parser": "~1.0.1",
+    "enum": "^2.4.0",
     "express": "~4.0.0",
     "mysql": "^2.13.0",
-    "sequelize": "^3.30.2"
+    "sequelize": "^3.30.2",
+    "sequelize-cli": "^2.5.1"
   }
 }

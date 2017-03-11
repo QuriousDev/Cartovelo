@@ -1,4 +1,5 @@
 var sequelize = require('sequelize');
+var status = require('../helpers/status')
 
 module.exports = function(sequelize, DataTypes) {
   var Issues = sequelize.define('Issues', {
@@ -12,7 +13,12 @@ module.exports = function(sequelize, DataTypes) {
     latitude: DataTypes.DOUBLE,
     longitude: DataTypes.DOUBLE,
     image: DataTypes.STRING,
-    date: DataTypes.DATE
+    date: DataTypes.DATE,
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: status.OPENED.toString()
+    },
+
   }, {
     createdAt: false,
     updatedAt: false,

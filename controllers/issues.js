@@ -1,6 +1,9 @@
 var Issues = require('../models').Issues
 var sequelize = require('sequelize');
 var verify = require('../helpers/parameters');
+var IssueNotFound = require('../exceptions/issueNotFound');
+var InvalidParameter = require('../exceptions/invalidParameter');
+var status = require('../helpers/status');
 
 module.exports = {
 
@@ -26,5 +29,28 @@ module.exports = {
         date: sequelize.fn('NOW')
       })
       .then(issue => res.status(201).json({ id: issue.id }));
+  },
+
+  updateStatus: function(req, res, next) {
+    verify.verifyParameter(req.body.status, 'status');
+
+    req.body.status.toUpperCase();
+
+    if(!status.get(req.body.status)) {
+      throw new InvalidParameter('Invalid status : ' + req.body.status);
+    }
+
+    return Issues
+      .findById(req.params.id)
+      .then(issue => {
+        if (!issue) {
+          throw new IssueNotFound('Issue ' + req.params.id + ' not found');
+        }
+        return issue
+          .update({
+            status: req.body.status,
+          })
+          .then(() => res.status(204).send());
+      })
   }
 };
