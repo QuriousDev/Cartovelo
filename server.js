@@ -1,4 +1,5 @@
-var issues     = require('./routes/issues')
+var issues_router     = require('./routes/issues')
+var paths_router = require('./routes/paths')
 var express    = require('express');
 var app        = express();
 var bodyParser = require('body-parser');
@@ -14,7 +15,8 @@ app.use(function(req, res, next) {
 
 var port = process.env.PORT || 3000;
 
-app.use('/api', issues);
+app.use('/api', issues_router);
+app.use('/api', paths_router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

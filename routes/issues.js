@@ -1,5 +1,5 @@
 
-var controller = require('../controllers/issues')
+var controller = require('../controllers/issues');
 var express = require('express');
 var router = express.Router();
 
