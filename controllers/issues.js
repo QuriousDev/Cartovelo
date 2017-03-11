@@ -43,15 +43,15 @@ module.exports = {
       return Issues
         .findById(req.params.id)
         .then(issue => {
-          if (!issue) {
-            throw new IssueNotFound('Issue ' + req.params.id + ' not found');
-          }
           return issue
             .update({
               image: filename || issue.image
             })
             .then(() => res.status(204).send());
         })
+        .catch(function (err) {
+          next(new IssueNotFound('Issue ' + req.params.id + ' not found'));
+        });
   },
 
   update: function(req, res, next) {
@@ -66,9 +66,6 @@ module.exports = {
     return Issues
       .findById(req.params.id)
       .then(issue => {
-        if (!issue) {
-          throw new IssueNotFound('Issue ' + req.params.id + ' not found');
-        }
         return issue
           .update({
             status: req.body.status || issue.status,
@@ -76,5 +73,8 @@ module.exports = {
           })
           .then(() => res.status(204).send());
       })
+      .catch(function (err) {
+        next(new IssueNotFound('Issue ' + req.params.id + ' not found'));
+      });
   }
 };
