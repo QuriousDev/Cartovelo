@@ -30,7 +30,7 @@ module.exports = {
          })
     }).catch(function (err) {
       //next(new PathNotFound('Path : ' + city + "/" + activity + " not found"))
-      res.send("City not found")
+      res.json({});
     })
 
 
