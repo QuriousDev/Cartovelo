@@ -1,6 +1,10 @@
-// uuid
+var config = require('../config/s3.json');
+
 var uuid = require('node-uuid');
-var mime = require('mime-types')
+var mime = require('mime-types');
+var multer  = require('multer')
+var multerS3 = require('multer-s3')
+
 // aws init code
 var AWS = require('aws-sdk');
 AWS.config.update({
@@ -8,19 +12,11 @@ AWS.config.update({
 });
 var s3 = new AWS.S3();
 
-// bucket list
-imageBucket = 'hackqc-images'
-roadBucket = "hackqc-roads"
-
-// multer s3
-var multer  = require('multer')
-var multerS3 = require('multer-s3')
-
 module.exports = {
 
   // create file in bucket and make it public-read
   saveToImageBucket: function(filename, body) {
-    params = {Bucket: imageBucket, Key: filename, Body: body, ACL: 'public-read'};
+    params = {Bucket: config.imageBucket, Key: filename, Body: body, ACL: 'public-read'};
     s3.putObject(params, function(err, data) {
        if (err) {
            console.log(err)
@@ -30,8 +26,12 @@ module.exports = {
     });
   },
 
+  getImageURL: function(name) {
+    return name ? `${config.endpoint}/${config.imageBucket}/${name}` : name;
+  },
+
   getFromRoadBucket: function(filename, callback) {
-    var params = {Bucket: roadBucket, Key: filename};
+    var params = {Bucket: config.roadBucket, Key: filename};
     s3.getObject(params, function(err, json_data) {
       if (!err) {
         var json = JSON.parse(new Buffer(json_data.Body).toString("utf8"));
@@ -46,7 +46,7 @@ module.exports = {
     return multer({
         storage: multerS3({
             s3: s3,
-            bucket: imageBucket,
+            bucket: config.imageBucket,
             acl: 'public-read',
             key: function (req, file, cb) {
                 ext = mime.extension(file.mimetype)

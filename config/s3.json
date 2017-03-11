@@ -1,0 +1,5 @@
+{
+  "imageBucket": "hackqc-images",
+  "roadBucket": "hackqc-roads",
+  "endpoint": "http://s3.us-east-2.amazonaws.com"
+}
