@@ -43,9 +43,8 @@
         <ul class="nav navbar-nav">
           <li class="dropdown open">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Dropdown <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="/#!/view1/sherbrooke">Sherbrooke</a></li>
-              <li><a href="/#!/view1/montreal">Montreal</a></li>
+            <ul ng-include="myFile.htm" class="dropdown-menu">
+              <li ng-repeat="city in cities"><a href="/#!/view1/{{ city }}">{{ city }}</a></li>
             </ul>
           </li>
         </ul>

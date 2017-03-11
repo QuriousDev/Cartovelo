@@ -7,7 +7,16 @@
     <div class="col-sm-3 col-md-2 sidebar">
       <ul ng-init="selectedTab = 'all'" class="nav nav-sidebar">
         <li ng-class="{'active':selectedTab === 'all'}" ng-click="selectedTab = 'all'"><a ng-click="getIssues()">Tous les problèmes</a></li>
-        <li ng-class="{'active':selectedTab === 'test'}" ng-click="selectedTab = 'test'"><a ng-click="getIssues('patate')">Tous les problèmes</a></li>
+        <li ng-class="{'active':selectedTab === 'test'}" ng-click="selectedTab = 'test'"><a ng-click="getIssues('patate')">Patate</a></li>
+        <div class="form-group">
+          <label for="dateStart">Date de début</label>
+          <input placeholder="(yyyy-mm-dd)" ng-model='dateStart' id="dateStart" type="date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="dateEnd">Date de fin</label>
+          <input placeholder="(yyyy-mm-dd)" ng-model='dateEnd' id="dateEnd" type="date" class="form-control">
+        </div>
+        <div ng-click="filterDate()" class="btn btn-primary">allo</div>
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-no-gutter">
