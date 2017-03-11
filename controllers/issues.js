@@ -5,7 +5,9 @@ var verify = require('../helpers/parameters');
 module.exports = {
 
   issues_list: function(req, res, next) {
-      res.send('NOT IMPLEMENTED: Book list');
+    return Issues
+      .all()
+      .then(issues => res.status(200).json({ issues: issues }))
   },
 
   create: function(req, res, next) {
