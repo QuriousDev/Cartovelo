@@ -4,6 +4,6 @@ var router = express.Router();
 
 router.get('/issues', controller.issues_list);
 router.post('/issues/submit', controller.create);
-router.put('/issues/:id/status', controller.updateStatus);
+router.put('/issues/:id', controller.update);
 
 module.exports = router;

@@ -14,6 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     longitude: DataTypes.DOUBLE,
     image: DataTypes.STRING,
     date: DataTypes.DATE,
+    comment: DataTypes.STRING,
     status: {
       type: DataTypes.STRING,
       defaultValue: status.OPENED.toString()

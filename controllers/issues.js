@@ -31,13 +31,13 @@ module.exports = {
       .then(issue => res.status(201).json({ id: issue.id }));
   },
 
-  updateStatus: function(req, res, next) {
-    verify.verifyParameter(req.body.status, 'status');
+  update: function(req, res, next) {
+    if(req.body.status) {
+      req.body.status.toUpperCase();
 
-    req.body.status.toUpperCase();
-
-    if(!status.get(req.body.status)) {
-      throw new InvalidParameter('Invalid status : ' + req.body.status);
+      if(!status.get(req.body.status)) {
+        throw new InvalidParameter('Invalid status : ' + req.body.status);
+      }
     }
 
     return Issues
@@ -48,7 +48,8 @@ module.exports = {
         }
         return issue
           .update({
-            status: req.body.status,
+            status: req.body.status || issue.status,
+            comment: req.body.comment || issue.comment
           })
           .then(() => res.status(204).send());
       })
