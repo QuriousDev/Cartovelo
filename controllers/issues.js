@@ -26,5 +26,10 @@ module.exports = {
         date: sequelize.fn('NOW')
       })
       .then(issue => res.status(201).json({ id: issue.id }));
+  },
+
+  image_upload: function(req, res, next) {
+      filename = req.files[0].key
+      res.status(200).send("Image " + filename + " successfully to id " + req.params.id)
   }
 };

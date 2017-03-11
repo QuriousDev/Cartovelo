@@ -1,3 +1,6 @@
+// uuid
+var uuid = require('node-uuid');
+var mime = require('mime-types')
 // aws init code
 var AWS = require('aws-sdk');
 AWS.config.update({
@@ -8,6 +11,10 @@ var s3 = new AWS.S3();
 // bucket list
 imageBucket = 'hackqc-images'
 roadBucket = "hackqc-roads"
+
+// multer s3
+var multer  = require('multer')
+var multerS3 = require('multer-s3')
 
 module.exports = {
 
@@ -32,6 +39,22 @@ module.exports = {
       } else {
         callback("There was an error : " + err)
       }
+    });
+  },
+
+  getUploadMulterS3: function() {
+    return multer({
+        storage: multerS3({
+            s3: s3,
+            bucket: imageBucket,
+            acl: 'public-read',
+            key: function (req, file, cb) {
+                ext = mime.extension(file.mimetype)
+                name = uuid.v4() + "." + ext
+                console.log(name);
+                cb(null, name); //use Date.now() for unique file keys || file.originalname
+            }
+        })
     });
   }
 }
