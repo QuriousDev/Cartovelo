@@ -30,6 +30,11 @@ module.exports = {
       })
       .then(issue => res.status(201).json({ id: issue.id }));
   },
+  
+  image_upload: function(req, res, next) {
+      filename = req.files[0].key
+      res.status(200).send("Image " + filename + " successfully to id " + req.params.id)
+  },
 
   update: function(req, res, next) {
     if(req.body.status) {

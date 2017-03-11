@@ -12,7 +12,6 @@ module.exports = {
     city = req.params.city
     activity = req.params.activity
     if(city == "sherbrooke" && activity == "bike") {
-
       aws.getFromRoadBucket("sherbrooke_pistes_cyclables.json", function(s3reponse) {
         res.send(s3reponse)
       })
