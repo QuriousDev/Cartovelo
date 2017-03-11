@@ -5,6 +5,7 @@ var IssueNotFound = require('../exceptions/issueNotFound');
 var InvalidParameter = require('../exceptions/invalidParameter');
 var status = require('../helpers/status');
 var s3 = require('../helpers/s3.js');
+var users = require('./users');
 
 module.exports = {
 
@@ -17,6 +18,36 @@ module.exports = {
         });
         res.status(200).json({ issues: issues });
       })
+  },
+
+  issues_list_city: function(req, res, next) {
+    users.coordinates(req.params.city, function(err, coordinates){
+      if(err) {
+        return next(err);
+      }
+
+      Issues
+        .findAll({
+          where: {
+            $and: {
+              longitude: {
+                $gte: coordinates.minLongitude,
+                $lte: coordinates.maxLongitude
+              },
+              latitude: {
+                $gte: coordinates.minLatitude,
+                $lte: coordinates.maxLatitude
+              }
+            }
+          }
+        })
+        .then(issues => {
+          issues.forEach(function(issue) {
+            issue.image = s3.getImageURL(issue.image);
+          });
+          res.status(200).json({ issues: issues });
+        });
+    });
   },
 
   create: function(req, res, next) {
