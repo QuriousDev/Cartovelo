@@ -1,5 +1,7 @@
 'use strict';
 
+var apiBase = "http://ec2-52-14-137-171.us-east-2.compute.amazonaws.com:3000/api"
+
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
   'ngRoute',
@@ -10,5 +12,5 @@ angular.module('myApp', [
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
-  $routeProvider.otherwise({redirectTo: '/view1'});
+  $routeProvider.otherwise({redirectTo: '/view1/sherbrooke'});
 }]);

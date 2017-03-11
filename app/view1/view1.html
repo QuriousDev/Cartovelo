@@ -1,1 +1,17 @@
-<p>This is the partial for view 1.</p>
+<style type="text/css">
+  #map_canvas { height: calc(100vh - 50px) }
+</style>
+
+<div class="container-fluid" ng-controller="View1Ctrl" ng-init="initMap()">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul ng-init="selectedTab = 'all'" class="nav nav-sidebar">
+        <li ng-class="{'active':selectedTab === 'all'}" ng-click="selectedTab = 'all'"><a ng-click="getIssues()">Tous les problèmes</a></li>
+        <li ng-class="{'active':selectedTab === 'test'}" ng-click="selectedTab = 'test'"><a ng-click="getIssues('patate')">Tous les problèmes</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-no-gutter">
+      <div id="map_canvas"></div>
+    </div>
+  </div>
+</div>
