@@ -62,6 +62,7 @@ module.exports = {
         description: req.body.description,
         latitude: req.body.latitude,
         longitude: req.body.longitude,
+        comment: '',
         image: '',
         date: sequelize.fn('NOW')
       })
