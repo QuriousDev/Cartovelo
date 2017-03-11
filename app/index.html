@@ -23,6 +23,16 @@
     src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBCwEh5FP5L0Gn90F4xBWxkhW5tfj7gb_U">
   </script>
   
+  <script>
+    // See http://www.backalleycoder.com/2016/05/13/sghpa-the-single-page-app-hack-for-github-pages/
+    (function(){
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect != location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    })();
+  </script>
 
 </head>
 
