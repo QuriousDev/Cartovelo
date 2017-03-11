@@ -2,6 +2,7 @@
   "name": "testaws",
   "main": "server.js",
   "dependencies": {
+    "aws-sdk": "^2.27.0",
     "body-parser": "~1.0.1",
     "express": "~4.0.0",
     "mysql": "^2.13.0",
