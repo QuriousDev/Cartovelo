@@ -1,6 +1,6 @@
 #Mac shits
 .DS_Store
-config.js
+config/config.json
 
 # Logs
 logs
