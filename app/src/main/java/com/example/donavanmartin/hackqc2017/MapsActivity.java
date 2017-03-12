@@ -93,9 +93,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         getIssueTask getMarker = new getIssueTask(this);
         getMarker.execute();
     }
@@ -114,8 +111,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for(JSONObject js : a){
             LatLng sydney = null;
             try {
-                sydney = new LatLng(Double.valueOf((String)js.get("latitude")), Double.valueOf((String)js.get("longitude")));
-                mMap.addMarker(new MarkerOptions().position(sydney).title(js.get("comment")));
+                String la =js.getString("latitude");
+                String lo =js.getString("longitude");
+                String d =js.getString("title");
+                sydney = new LatLng(Double.valueOf(la), Double.valueOf(lo));
+                mMap.addMarker(new MarkerOptions().position(sydney).title("a"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
             } catch (JSONException e) {
                 e.printStackTrace();
