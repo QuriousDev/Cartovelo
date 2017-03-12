@@ -2,30 +2,65 @@
   #map_canvas { height: calc(100vh - 50px) }
 </style>
 
-<div class="container-fluid" ng-controller="View2Ctrl" ng-init="initMap()">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">QuriousApp</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{original_city}} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="city in cities" ng-click="changeCity(city)" ><a href="/#!/view2/{{ city }}">{{ city }}</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/#!/view1/{{ original_city }}">Voir sous forme de carte</a></li>
+        <li><a href="/#!/view2/{{ original_city }}">Voir sous forme de liste</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<toast></toast>
+
+<div class="container-fluid" ng-init="initMap()">
   <div class="row">
     <div class="col-sm-3 col-md-2 sidebar">
-      <ul class="nav nav-sidebar">
-        <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-        <li><a href="/#!/view1">Reports</a></li>
-        <li><a href="/#!/view2">Analytics</a></li>
-        <li><a href="#">Export</a></li>
-      </ul>
-      <ul class="nav nav-sidebar">
-        <li><a href="">Nav item</a></li>
-        <li><a href="">Nav item again</a></li>
-        <li><a href="">One more nav</a></li>
-        <li><a href="">Another nav item</a></li>
-        <li><a href="">More navigation</a></li>
-      </ul>
-      <ul class="nav nav-sidebar">
-        <li><a href="">Nav item again</a></li>
-        <li><a href="">One more nav</a></li>
-        <li><a href="">Another nav item</a></li>
+      <ul ng-init="selectedTab = 'all'" class="nav nav-sidebar">
+        <li ng-class="{'active':selectedTab === 'all'}" ng-click="selectedTab = 'all'"><a ng-click="getIssues()">Tous les problèmes</a></li>
+        <li ng-class="{'active':selectedTab === 'test'}" ng-click="selectedTab = 'test'"><a ng-click="getIssues('patate')">Patate</a></li>
+        <li ng-repeat="city in cities" ng-click="changeCity(city)" ><a href="/#!/view1/{{ city }}">{{ city }}</a></li>
+        <div class="form-group">
+          <label for="dateStart">Date de début</label>
+          <input placeholder="(yyyy-mm-dd)" ng-model='dateStart' id="dateStart" type="date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="dateEnd">Date de fin</label>
+          <input placeholder="(yyyy-mm-dd)" ng-model='dateEnd' id="dateEnd" type="date" class="form-control">
+        </div>
+        <div ng-click="filterDate()" class="btn btn-primary">allo</div>
+        <p>{{issue.title}}</p>
+        <p>{{issue.status}}</p>
+        <p>{{issue.description}}</p>
+        <input ng-model="issue.comment">
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-no-gutter">
-      <p>hehe</p>
+      <div id="map_canvas">
+        {{himofos}}
+        <div class="list-group quriousList">
+          <a ng-repeat="qissue in qissues2" ng-click="" class="list-group-item" >{{qissue.title}}</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

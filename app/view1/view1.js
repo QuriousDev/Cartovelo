@@ -9,7 +9,7 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
   });
 }])
 
-.controller('View1Ctrl', 
+.controller('View1Ctrl',
   [
     '$scope',
     '$routeParams',
@@ -19,6 +19,7 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
     function ($scope, $routeParams, $http, $compile, ngToast) {
       $scope.markers = [];
       $scope.city = $routeParams.city;
+      $scope.original_city = $routeParams.city
       var bounds = new google.maps.LatLngBounds();
       var infoWindow = new google.maps.InfoWindow();
 
