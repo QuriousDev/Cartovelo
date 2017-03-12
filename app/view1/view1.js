@@ -23,6 +23,10 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast', 'ngMaterial'])
       $scope.issues = []
       $scope.googleMarkers = []
       $scope.bounds = new google.maps.LatLngBounds();
+      $scope.infowindow = new google.maps.InfoWindow({
+          content: ''
+      });
+
       $.getJSON(apiBase + "/issues/" + $scope.city, function(json) {
         $.each(json.issues, function(key, data) {
           var marker = new google.maps.Marker({
@@ -42,27 +46,22 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast', 'ngMaterial'])
                     <img src="${data.image}" style="width:100%; max-width:200px; max-height:200px">
                   </a>
                 </div>
-                <div>
-                  <b>État</b>
-                  <select style="margin-bottom:20px;" ng-model="issue.status" class="form-control">
-                    <option value="OPENED">Nouveau</option>
-                    <option value="REVIEWING">En cours de révision</option>
-                    <option value="REJECTED">Rejeté</option>
-                    <option value="CLOSED">Résolu</option>
-                  </select>
-                </div>
-                <p>
-                  <b>Commentaire</b>
-                  <textarea ng-model="issue.comment" class="form-control"></textarea>
-                </p>
-                <br>
-                <div ng-click="save('${data.id}');" class="pull-right btn btn-primary">Sauvegarder</div>
             </div>
           `
           marker.setMap($scope.map);
           bounds.extend(marker.position);
           $scope.map.fitBounds(bounds);
           $scope.googleMarkers.push(marker);
+
+          var compiled = $compile(markerContent)($scope);
+
+          // Marker click listener
+          google.maps.event.addListener(marker, 'click', (function (marker, compiled) {
+              return function () {
+                  $scope.infowindow.setContent(compiled);
+                  $scope.infowindow.open($scope.map, marker);
+              }
+          })(marker, compiled[0]));
         })
       })
 
@@ -128,7 +127,7 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast', 'ngMaterial'])
       $scope.filterDate = function () {
         if($scope.startDate) var s = new Date($scope.startDate);
         if($scope.endDate) var e = new Date($scope.endDate);
-        
+
         for(var i=0; i < $scope.googleMarkers.length; i++){
           
           if($scope.googleMarkers[i].date) var markerDate = new Date($scope.googleMarkers[i].date);
