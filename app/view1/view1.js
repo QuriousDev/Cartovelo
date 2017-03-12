@@ -17,15 +17,178 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast', 'ngMaterial'])
     '$compile',
     'ngToast',
     function ($scope, $routeParams, $http, $compile, ngToast) {
-      $scope.markers = [];
-      $scope.city = $routeParams.city;
-      $scope.original_city = $routeParams.city
-      var bounds = new google.maps.LatLngBounds();
-      var infoWindow = new google.maps.InfoWindow();
+
+      $scope.city = $routeParams.city
+
+      $scope.issues = []
+      $scope.googleMarkers = []
+      $scope.bounds = new google.maps.LatLngBounds();
+      $.getJSON(apiBase + "/issues/" + $scope.city, function(json) {
+        $.each(json.issues, function(key, data) {
+          var marker = new google.maps.Marker({
+              title: data.title,
+              position: new google.maps.LatLng(data.latitude, data.longitude),
+              type: data.title,
+              status: data.status,
+              date: data.date,
+              description: data.description
+          });
+          var markerContent = `
+            <div>
+              <div>
+                <p class="lead" style="margin:0;"><b>${data.description}</b></p>
+                <div style="margin-bottom:20px; margin-top:10px;">
+                  <a href="${data.image}">
+                    <img src="${data.image}" style="width:100%; max-width:200px; max-height:200px">
+                  </a>
+                </div>
+                <div>
+                  <b>État</b>
+                  <select style="margin-bottom:20px;" ng-model="issue.status" class="form-control">
+                    <option value="OPENED">Nouveau</option>
+                    <option value="REVIEWING">En cours de révision</option>
+                    <option value="REJECTED">Rejeté</option>
+                    <option value="CLOSED">Résolu</option>
+                  </select>
+                </div>
+                <p>
+                  <b>Commentaire</b>
+                  <textarea ng-model="issue.comment" class="form-control"></textarea>
+                </p>
+                <br>
+                <div ng-click="save('${data.id}');" class="pull-right btn btn-primary">Sauvegarder</div>
+            </div>
+          `
+          marker.setMap($scope.map);
+          bounds.extend(marker.position);
+          $scope.map.fitBounds(bounds);
+          $scope.googleMarkers.push(marker);
+        })
+      })
 
       $http.get(apiBase + "/users").then(function(res,status,xhr) {
         $scope.cities = res.data
       })
+
+      $scope.filterTypeItems = {
+        'circulation': true,
+        'embuche': true,
+        'signalisation': true,
+        'bris': true
+      };
+
+      $scope.typeItems = [
+        {name:'circulation', label: "Circulation"}, 
+        {name:'embuche', label: "Embuche"}, 
+        {name:'signalisation', label: "Signalisation"},
+        {name:'bris', label: "Bris"},
+      ];
+
+      $scope.filterType = function () {
+        var vals = Object.keys($scope.filterTypeItems).map(function(key) {
+            return $scope.filterTypeItems[key];
+        });
+        for(var i=0; i < $scope.googleMarkers.length; i++){
+          $scope.googleMarkers[i].setVisible(true);
+          for(var j=0; j< vals.length; j++){
+            if($scope.googleMarkers[i].type == Object.keys($scope.filterTypeItems)[j] && vals[j] == false){
+              $scope.googleMarkers[i].setVisible(false);
+            }
+          }
+        }
+      };
+
+      $scope.filterStatusItems = {
+        'OPENED': true,
+        'REVIEWING': true,
+        'REJECTED': true,
+        'CLOSED': true
+      };
+      $scope.statusItems = [
+        {name:'REVIEWING', label: "Révision en cours"},
+        {name:'OPENED', label: "Nouveau"}, 
+        {name:'REJECTED', label: "Rejeté"},
+        {name:'CLOSED', label: "Résolu"}
+      ];
+
+      $scope.filterStatus = function () {
+        var vals = Object.keys($scope.filterStatusItems).map(function(key) {
+            return $scope.filterStatusItems[key];
+        });
+        for(var i=0; i < $scope.googleMarkers.length; i++){
+          $scope.googleMarkers[i].setVisible(true);
+          for(var j=0; j< vals.length; j++){
+            if($scope.googleMarkers[i].status == Object.keys($scope.filterStatusItems)[j] && vals[j] == false){
+              $scope.googleMarkers[i].setVisible(false);
+            }
+          }
+        }
+      };
+
+      $scope.filterDate = function () {
+        if($scope.startDate) var s = new Date($scope.startDate);
+        if($scope.endDate) var e = new Date($scope.endDate);
+        
+        for(var i=0; i < $scope.googleMarkers.length; i++){
+          
+          if($scope.googleMarkers[i].date) var markerDate = new Date($scope.googleMarkers[i].date);
+
+          console.log("****************")
+          console.log(markerDate)
+          console.log(s)
+          console.log(e)
+
+          if ( markerDate === null ){
+            console.log("1")
+            $scope.googleMarkers[i].setVisible(true);
+            return
+          }
+
+          if ( s === undefined && e === undefined){
+            console.log("2")
+            $scope.googleMarkers[i].setVisible(true);
+            return
+          }
+
+          if ( s === undefined && e !== undefined){
+            console.log("3")
+            if(markerDate <= e){
+              $scope.googleMarkers[i].setVisible(true);
+              return
+            }
+          }
+          if ( s !== undefined && e === undefined){
+            console.log("4")
+            if(markerDate >= s){
+              $scope.googleMarkers[i].setVisible(true);
+              return
+            }
+          }
+
+          if (markerDate >= s && markerDate <= e){
+            console.log("5")
+            $scope.googleMarkers[i].setVisible(true);
+            return
+          }
+
+          console.log("6")
+          $scope.googleMarkers[i].setVisible(false);
+        
+        }
+      }
+
+      $scope.save = function(marker) {
+        $http.put(apiBase + "/issues/"+marker.id, {status: marker.status, comment: marker.comment} ).then(function(res, status, xhr) {
+          if(res.status == 204)
+            ngToast.success('Informations mises à jour avec succès.');
+          else
+            ngToast.error('Erreur lors de la sauvegarde des informations.');
+        })
+      }
+
+      // GOOGLE MAPS
+      var bounds = new google.maps.LatLngBounds();
+      var infoWindow = new google.maps.InfoWindow();
 
       $scope.initMap = function() {
         var mapCenter = {
@@ -131,157 +294,10 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast', 'ngMaterial'])
           $scope.map.data.addGeoJson(json);
         })
 
-        console.log($scope.map.data)
         $scope.map.data.setStyle({
           strokeColor: 'green'
         });
-
-        $scope.getIssues()
-        console.log("init!")
-        setMapOnAll($scope.map)
       }
-
-      $scope.getIssues = function(type, startDate, endDate, status) {
-        function dateFilter(data, startDate, endDate){
-          if(!startDate)
-            startDate = new Date("0001-01-01")
-          if(!endDate)
-            endDate = new Date("3000-01-01")
-          return new Date(data.date) >= new Date(startDate) && new Date(data.date) <= new Date(endDate);
-        }
-        deleteMarkers()
-        if(!type){
-          $.getJSON(apiBase + "/issues/"+$scope.city, function(json1) {
-            $.each(json1.issues, function(key, data) {
-              if(dateFilter(data, startDate, endDate)){
-                var latLng = new google.maps.LatLng(data.latitude, data.longitude);
-
-                var markerContent = `
-                  <div>
-                    <div>
-                      <p class="lead" style="margin:0;"><b>${data.description}</b></p>
-                      <div style="margin-bottom:20px; margin-top:10px;">
-                        <a href="${data.image}">
-                          <img src="${data.image}" style="width:100%; max-width:200px; max-height:200px">
-                        </a>
-                      </div>
-                      <div>
-                        <b>État</b>
-                        <select style="margin-bottom:20px;" ng-model="issue.status" class="form-control">
-                          <option value="OPENED">Nouveau</option>
-                          <option value="REVIEWING">En cours de révision</option>
-                          <option value="REJECTED">Rejeté</option>
-                          <option value="CLOSED">Résolu</option>
-                        </select>
-                      </div>
-                      <p>
-                        <b>Commentaire</b>
-                        <textarea ng-model="issue.comment" class="form-control"></textarea>
-                      </p>
-                      <br>
-                      <div ng-click="save('${data.id}');" class="pull-right btn btn-primary">Sauvegarder</div>
-                  </div>
-                `
-                var compiledMarkerContent = $compile(markerContent)($scope)
-
-                var pinIcon;
-                if(data.status == "CLOSED")
-                  pinIcon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-
-                var marker = new google.maps.Marker({
-                  position: latLng,
-                  type: data.title,
-                  id: data.id,
-                  icon: pinIcon,
-                  status: data.status,
-                  infoWindowContent: compiledMarkerContent[0]
-                });
-
-                bounds.extend(marker.position);
-
-                marker.addListener('click', function() {
-                  updateCurrentIssueScope(data)
-                  infoWindow.setContent(this.infoWindowContent);
-                  infoWindow.open($scope.map, marker);
-                });
-                marker.setMap($scope.map);
-                $scope.map.fitBounds(bounds);
-                $scope.markers.push(marker);
-              }
-            });
-          });
-        }
-        else{
-        }
-      }
-
-      function updateCurrentIssueScope(data){
-        $scope.issue = {}
-        $scope.issue.id = data.id
-        $scope.issue.comment = data.comment
-        $scope.issue.title = data.title
-        $scope.issue.description = data.description
-        $scope.issue.status = data.status
-        $scope.$apply()
-      }
-
-      function deleteMarker(markerId) {
-        for (var i=0; i<$scope.markers.length; i++) {
-          if($scope.markers[i].id == markerId){
-            $scope.markers[i].setMap(null);
-          }
-        }
-      }
-
-      $scope.changeCity = function(city) {
-          $scope.selectedCity = city;
-      };
-
-      $scope.filterDate = function() {
-          $scope.getIssues(null, $scope.dateStart, $scope.dateEnd)
-      }
-
-      $scope.save = function(id) {
-        if($scope.issue.comment){
-          $http.put(apiBase + "/issues/"+id, {status: $scope.issue.status, comment: $scope.issue.comment} ).then(function(res, status, xhr) {
-            if(res.status == 204)
-              ngToast.success('Commentaire sauvegardé avec succès.');
-            else
-              ngToast.error('Erreur lors de la sauvegarde.');
-          });
-        }
-        if(infoWindow){
-          infoWindow.close();
-        }
-        deleteMarkers()
-        $scope.getIssues()
-
-      }
-
-      function setMapOnAll(map) {
-        for (var i = 0; i < $scope.markers.length; i++) {
-          $scope.markers[i].setMap(map);
-        }
-      }
-
-      // Removes the $scope.markers from the map, but keeps them in the array.
-      function clearMarkers() {
-        setMapOnAll(null);
-      }
-
-      // Shows any $scope.markers currently in the array.
-      function showMarkers() {
-        setMapOnAll(map);
-      }
-
-      // Deletes all $scope.markers in the array by removing references to them.
-      function deleteMarkers() {
-        for (var i = 0; i < $scope.markers.length; i++) {
-          $scope.markers[i].setMap(null);
-          $scope.markers[i] = null
-        }
-        $scope.markers = [];
-      }
-
     }
+
 ]);
