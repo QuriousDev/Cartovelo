@@ -48,11 +48,13 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
           $scope.map.data.addGeoJson(json);
         })
 
+        console.log($scope.map.data)
         $scope.map.data.setStyle({
           strokeColor: 'green'
         });
 
         $scope.getIssues()
+        console.log("init!")
         setMapOnAll($scope.map)
       }
 
@@ -82,20 +84,20 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
                       <hr>
                       <p><b>${data.title}</b></p>
                       <p>
-                        <label class="label label-default">
-                          ${data.status}
-                        </label>
+                        <select ng-model="issue.status" class="form-control">
+                          <option>OPENED</option>
+                          <option>REVIEWING</option>
+                          <option>REJECTED</option>
+                          <option>CLOSED</option>
+                        </select>
                       </p>
                       <p>${data.description}</p>
                       <p><b>Commentaire</b>
                         <div>
                           <textarea ng-model="issue.comment" class="form-control"></textarea>
-                          <div ng-click="saveComment('${data.id}')" class="btn btn-primary">Sauvegarder</div>
+                          <div ng-click="save('${data.id}');" class="btn btn-primary">Sauvegarder</div>
                         </div>
                       </p>
-                      <div ng-click="markResolved('${data.id}')" class="btn btn-success">
-                        Marquer comme résolu
-                      </div>
                   </div>
                 `
                 var compiledMarkerContent = $compile(markerContent)($scope)
@@ -115,13 +117,7 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
                 bounds.extend(marker.position);
 
                 marker.addListener('click', function() {
-                  $scope.issue = {}
-                  $scope.issue.id = data.id
-                  $scope.issue.comment = data.comment
-                  $scope.issue.title = data.title
-                  $scope.issue.description = data.description
-                  $scope.issue.status = data.status
-                  $scope.$apply()
+                  updateCurrentIssueScope(data)
                   infoWindow.setContent(this.infoWindowContent);
                   infoWindow.open($scope.map, marker);
                 });
@@ -134,6 +130,17 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
         }
         else{
         }
+        console.log("get issues")
+      }
+
+      function updateCurrentIssueScope(data){
+        $scope.issue = {}
+        $scope.issue.id = data.id
+        $scope.issue.comment = data.comment
+        $scope.issue.title = data.title
+        $scope.issue.description = data.description
+        $scope.issue.status = data.status
+        $scope.$apply()
       }
 
       function deleteMarker(markerId) {
@@ -148,27 +155,13 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
           $scope.selectedCity = city;
       };
 
-      $scope.markResolved = function(id){
-        if(id){
-          $http.put(apiBase + "/issues/"+id, {status: "CLOSED"} ).then(function(res, status, xhr) {
-            if(res.status == 204)
-              ngToast.success('Marqué comme résolu avec succès.');
-            else
-              ngToast.error('Erreur!');
-            console.log(id)
-            deleteMarker(id)
-          });
-        }
-      }
-
       $scope.filterDate = function() {
           $scope.getIssues(null, $scope.dateStart, $scope.dateEnd)
       }
 
-      $scope.saveComment = function(id) {
-        console.log($scope.issue.comment)
+      $scope.save = function(id) {
         if($scope.issue.comment){
-          $http.put(apiBase + "/issues/"+id, {comment: $scope.issue.comment} ).then(function(res, status, xhr) {
+          $http.put(apiBase + "/issues/"+id, {status: $scope.issue.status, comment: $scope.issue.comment} ).then(function(res, status, xhr) {
             if(res.status == 204)
               ngToast.success('Commentaire sauvegardé avec succès.');
             else
@@ -178,6 +171,8 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
         if(infoWindow){
           infoWindow.close();
         }
+        deleteMarkers()
+        console.log($scope.markers)
         $scope.getIssues()
       }
 

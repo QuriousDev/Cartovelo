@@ -1,5 +1,8 @@
 <style type="text/css">
   #map_canvas { height: calc(100vh - 50px) }
+  .alert{
+    box-shadow: 0 3px 20px rgba(0,0,0,0.3);
+  }
 </style>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -16,9 +19,9 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{original_city}} <span class="caret"></span></a>
+          <a style="text-transform: capitalize;" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{original_city}} <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li ng-repeat="city in cities" ng-click="changeCity(city)" ><a href="/#!/view2/{{ city }}">{{ city }}</a></li>
+            <li style="text-transform: capitalize;" ng-repeat="city in cities" ng-click="changeCity(city)" ><a href="/#!/view2/{{ city }}">{{ city }}</a></li>
           </ul>
         </li>
       </ul>
@@ -53,13 +56,20 @@
         <p>{{issue.description}}</p>
         <input ng-model="issue.comment">
       </ul>
+      <strong>Filtres</strong>
+      <div class="form-group">
+        <label for="dateStart">Soumis après</label>
+        <input placeholder="(yyyy-mm-dd)" ng-model='dateStart' id="dateStart" type="date" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="dateEnd">Date de fin</label>
+        <input placeholder="(yyyy-mm-dd)" ng-model='dateEnd' id="dateEnd" type="date" class="form-control">
+      </div>
+      <div ng-click="filterDate()" class="btn btn-primary">allo</div>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-no-gutter">
-      <div id="map_canvas">
-        {{himofos}}
-        <div class="list-group quriousList">
-          <a ng-repeat="qissue in qissues2" ng-click="" class="list-group-item" >{{qissue.title}}</a>
-        </div>
+      <div class="list-group quriousList">
+        <a ng-repeat="qissue in qissues2" ng-click="" class="list-group-item" >{{qissue.title}}</a>
       </div>
     </div>
   </div>
