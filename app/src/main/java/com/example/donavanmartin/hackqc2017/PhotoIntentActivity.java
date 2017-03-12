@@ -17,8 +17,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -331,6 +333,8 @@ public class PhotoIntentActivity extends Activity implements TaskCAllback {
 		mImageView = (ImageView) findViewById(R.id.imageView);
 		spinner = (Spinner)  findViewById(R.id.spinner);
 		tf = (EditText)  findViewById(R.id.editText2);
+		tf.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		tf.setRawInputType(InputType.TYPE_CLASS_TEXT);
 		mImageBitmap = null;
 
 		mImageView.setOnClickListener(new View.OnClickListener() {

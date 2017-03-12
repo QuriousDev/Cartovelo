@@ -30,6 +30,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Button report;
+    private boolean first = true;
 
     /*@Override
     protected void onResume(){
@@ -91,13 +92,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double longitude = location.getLongitude();
         double latitude = location.getLatitude();
 
+
+
         mMap = googleMap;
-        // Add a marker in Sydney and move the camera
+        LatLng current = new LatLng(Double.valueOf(latitude), Double.valueOf(longitude));
+        mMap.addMarker(new MarkerOptions().position(current).title("Votre Position"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+
+
         getIssueTask getMarker = new getIssueTask(this);
         getMarker.execute();
+        if(first == true){
+            openPhoto();
+        }
     }
 
     private void openPhoto(){
+        if(first == true){
+            first = false;
+        }
         Intent i = new Intent(this, PhotoIntentActivity.class);
         this.startActivity(i);
     }

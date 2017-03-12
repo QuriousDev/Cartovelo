@@ -10,14 +10,17 @@
         android:id="@id/btn_conferma"
         style="?android:attr/borderlessButtonStyle"
         android:layout_height="70dp"
-        android:layout_marginLeft="2dp"
+        android:layout_width="70dp"
+
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_weight="1.0"
+
         android:background="@drawable/logo"
         android:gravity="center_horizontal|center_vertical"
         android:onClick="insertIntoDb"
         android:textColor="#ffffff"
         android:textSize="16sp"
-        android:layout_width="70dp"
         android:visibility="visible" />
 
 </fragment>

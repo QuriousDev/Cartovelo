@@ -1,93 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-    <ImageView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:visibility="visible"
-        android:id="@+id/imageView1" />
+    android:layout_height="match_parent">
 
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="316dp">
+        android:layout_height="316dp"
+        android:background="@color/cast_intro_overlay_background_color">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="305dp"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:onClick="true"
-            android:background="@android:drawable/ic_menu_camera" />
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="290dp"
+                android:onClick="true"
+                android:background="@android:drawable/ic_menu_camera"
+
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="39dp">
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingStart="20dp"
+        android:background="@color/cast_expanded_controller_ad_label_background_color"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:elevation="12dp">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/drop_shadow">
 
             <TextView
                 android:text="Type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="69dp"
+                android:layout_height="match_parent"
                 android:id="@+id/Type"
-                android:layout_weight="1" />
+                android:gravity="center"
+                android:textAlignment="gravity"
+                android:paddingLeft="10dp"
+                android:shadowRadius="2"
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="3"
+                android:textColor="@color/cast_libraries_material_featurehighlight_text_body_color" />
 
             <Spinner
                 android:layout_width="299dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/spinner"
-                android:entries="@array/type" />
+                android:entries="@array/type"
+                android:layout_weight="0.73"
+                android:padding="10dp"
+                android:paddingBottom="10dp"
+                android:paddingEnd="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+                android:elevation="15dp"
+                android:textColor="@color/cast_libraries_material_featurehighlight_text_body_color"/>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="119dp">
+        android:layout_height="150dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingStart="20dp"
+        android:background="@color/cast_expanded_controller_ad_label_background_color"
+        android:paddingTop="10dp">
 
-        <TextView
-            android:layout_width="122dp"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="Description: "
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textStyle="normal|bold"
-            android:background="@android:color/background_light" />
-
-        <EditText
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/editText2"
-            android:layout_weight="0.04" />
+            android:layout_height="match_parent"
+            android:background="@drawable/drop_shadow">
+
+            <EditText
+                android:hint="Entrez une description"
+                android:layout_width="match_parent"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/editText2"
+                android:textSize="14sp"
+                android:background="@color/wallet_highlighted_text_holo_dark"
+                android:layout_height="150dp"
+                android:paddingLeft="10dp"
+                android:lines="3"
+                android:scrollHorizontally="false"
+                tools:imeOptions="normal|actionDone"
+                android:textColor="@android:color/white"
+                android:shadowRadius="1"
+                android:shadowColor="#000000"
+                android:shadowDx="1"
+                android:shadowDy="2"/>
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingEnd="20dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingStart="10dp"
+        android:baselineAligned="true"
+        android:background="@color/cast_expanded_controller_ad_label_background_color"
+        android:paddingTop="20dp"
+        android:layout_height="120dp">
 
         <Button
-            android:text="Send"
-            android:layout_width="match_parent"
+            android:text="Envoyer"
+            android:layout_gravity="center"
+            android:layout_width="123dp"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonSend" />
+            android:id="@+id/buttonSend"
+            android:paddingEnd="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" />
     </LinearLayout>
 
 
