@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.view1', ['ngRoute', 'ngToast'])
+angular.module('myApp.view1', ['ngRoute', 'ngToast', 'ngMaterial'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/view1/:city', {
@@ -38,6 +38,89 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
           zoom: 2,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           maxZoom: 18,
+          styles: [
+              {
+                  "featureType": "administrative",
+                  "elementType": "all",
+                  "stylers": [
+                      {
+                          "visibility": "simplified"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "landscape",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "simplified"
+                      },
+                      {
+                          "color": "#fcfcfc"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "poi",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "simplified"
+                      },
+                      {
+                          "color": "#fcfcfc"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "road.highway",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "simplified"
+                      },
+                      {
+                          "color": "#dddddd"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "road.arterial",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "simplified"
+                      },
+                      {
+                          "color": "#dddddd"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "road.local",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "simplified"
+                      },
+                      {
+                          "color": "#eeeeee"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "water",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "simplified"
+                      },
+                      {
+                          "color": "#dddddd"
+                      }
+                  ]
+              }
+          ]
         };
         $scope.map = new google.maps.Map(document.getElementById("map_canvas"),
             mapOptions);
@@ -58,15 +141,13 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
         setMapOnAll($scope.map)
       }
 
-      $scope.getIssues = function(type, startDate, endDate) {
+      $scope.getIssues = function(type, startDate, endDate, status) {
         function dateFilter(data, startDate, endDate){
-          if(!startDate || !endDate){
-            return true;
-          }
-          else{
-            console.log(data)
-            return new Date(data.date) >= new Date(startDate) && new Date(data.date) <= new Date(endDate);
-          }
+          if(!startDate)
+            startDate = new Date("0001-01-01")
+          if(!endDate)
+            endDate = new Date("3000-01-01")
+          return new Date(data.date) >= new Date(startDate) && new Date(data.date) <= new Date(endDate);
         }
         deleteMarkers()
         if(!type){
@@ -78,26 +159,27 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
                 var markerContent = `
                   <div>
                     <div>
-                      <a href="${data.image}">
-                        <img src="${data.image}" style="width:100%; max-width:200px; max-height:200px">
-                      </a>
-                      <hr>
-                      <p><b>${data.title}</b></p>
-                      <p>
-                        <select ng-model="issue.status" class="form-control">
-                          <option>OPENED</option>
-                          <option>REVIEWING</option>
-                          <option>REJECTED</option>
-                          <option>CLOSED</option>
+                      <p class="lead" style="margin:0;"><b>${data.description}</b></p>
+                      <div style="margin-bottom:20px; margin-top:10px;">
+                        <a href="${data.image}">
+                          <img src="${data.image}" style="width:100%; max-width:200px; max-height:200px">
+                        </a>
+                      </div>
+                      <div>
+                        <b>État</b>
+                        <select style="margin-bottom:20px;" ng-model="issue.status" class="form-control">
+                          <option value="OPENED">Nouveau</option>
+                          <option value="REVIEWING">En cours de révision</option>
+                          <option value="REJECTED">Rejeté</option>
+                          <option value="CLOSED">Résolu</option>
                         </select>
+                      </div>
+                      <p>
+                        <b>Commentaire</b>
+                        <textarea ng-model="issue.comment" class="form-control"></textarea>
                       </p>
-                      <p>${data.description}</p>
-                      <p><b>Commentaire</b>
-                        <div>
-                          <textarea ng-model="issue.comment" class="form-control"></textarea>
-                          <div ng-click="save('${data.id}');" class="btn btn-primary">Sauvegarder</div>
-                        </div>
-                      </p>
+                      <br>
+                      <div ng-click="save('${data.id}');" class="pull-right btn btn-primary">Sauvegarder</div>
                   </div>
                 `
                 var compiledMarkerContent = $compile(markerContent)($scope)
@@ -108,9 +190,10 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
 
                 var marker = new google.maps.Marker({
                   position: latLng,
-                  title: data.title,
+                  type: data.title,
                   id: data.id,
                   icon: pinIcon,
+                  status: data.status,
                   infoWindowContent: compiledMarkerContent[0]
                 });
 
@@ -130,7 +213,6 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
         }
         else{
         }
-        console.log("get issues")
       }
 
       function updateCurrentIssueScope(data){
@@ -172,8 +254,8 @@ angular.module('myApp.view1', ['ngRoute', 'ngToast'])
           infoWindow.close();
         }
         deleteMarkers()
-        console.log($scope.markers)
         $scope.getIssues()
+
       }
 
       function setMapOnAll(map) {

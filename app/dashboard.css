@@ -5,6 +5,8 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
   padding-top: 50px;
+  font-family: "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  background: hsl(213, 55%, 34%)
 }
 
 
@@ -111,4 +113,27 @@ body {
 
 .quriousList {
   padding:20px;
+  background: hsl(213, 55%, 34%)
+}
+
+.navbar.navbar-hackqc{
+  background: #3979C5;
+  color: white !important;
+}
+
+.navbar.navbar-hackqc a{
+  color: white !important;
+}
+
+.nav-sidebar > .active > a, .nav-sidebar > .active > a:hover, .nav-sidebar > .active > a:focus{
+  background: #3979C5;
+}
+
+.btn.btn-primary{
+  background: #3979C5
+}
+
+.sidebar{
+  z-index: 0;
+  border-right: 1px solid #ccc;
 }

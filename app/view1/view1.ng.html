@@ -5,7 +5,7 @@
   }
 </style>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-hackqc navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -14,14 +14,17 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">QuriousApp</a>
+      <a class="navbar-brand" href="#">
+        <img src="img/logo-white.png" style="vertical-align:middle; display:inline-block; margin-right:7px; height:100%">
+        <strong>Cartovélo</strong>
+      </a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a style="text-transform: capitalize;" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{city}} <span class="caret"></span></a>
+          <a style="text-transform: uppercase;" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{city}} <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li style="text-transform: capitalize;" ng-repeat="city in cities" ng-click="changeCity(city)" ><a href="/#!/view1/{{ city }}">{{ city }}</a></li>
+            <li style="text-transform: uppercase;" ng-repeat="city in cities" ng-click="changeCity(city)" ><a style="color: #333 !important; " href="/#!/view1/{{ city }}">{{ city }}</a></li>
           </ul>
         </li>
       </ul>
@@ -37,23 +40,74 @@
 
 <div class="container-fluid" ng-init="initMap()">
   <div class="row">
-    <div class="col-sm-3 col-md-2 sidebar">
-      <ul ng-init="selectedTab = 'all'" class="nav nav-sidebar">
-        <li ng-class="{'active':selectedTab === 'all'}" ng-click="selectedTab = 'all'"><a ng-click="getIssues()">Tous les problèmes</a></li>
-        <li ng-class="{'active':selectedTab === 'test'}" ng-click="selectedTab = 'test'"><a ng-click="getIssues('patate')">Patate</a></li>
-      </ul>
-      <strong>Filtres</strong>
-      <div class="form-group">
-        <label for="dateStart">Soumis après</label>
-        <input placeholder="(yyyy-mm-dd)" ng-model='dateStart' id="dateStart" type="date" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="dateEnd">Date de fin</label>
-        <input placeholder="(yyyy-mm-dd)" ng-model='dateEnd' id="dateEnd" type="date" class="form-control">
-      </div>
-      <div ng-click="filterDate()" class="btn btn-primary">allo</div>
+    <div class="col-sm-5 col-md-4 sidebar">
+      <md-card style="margin-bottom:15px; padding:10px;" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+        <md-card-actions>
+          <label style="margin-bottom:15px;">Catégories</label>
+          <div>
+            <md-checkbox ng-click="toggle(item, selected)">
+              Circulation
+            </md-checkbox>
+          </div>
+          <div>
+            <md-checkbox ng-click="toggle(item, selected)">
+              Signalisation
+            </md-checkbox>
+          </div>
+          <div>
+            <md-checkbox ng-click="toggle(item, selected)">
+              Embûches
+            </md-checkbox>
+          </div>
+          <div>
+            <md-checkbox style="margin-bottom:5px;" ng-click="toggle(item, selected)">
+              Bris
+            </md-checkbox>
+          </div>
+        </md-card-actions>
+      </md-card>
+
+      <md-card style="margin-bottom:15px; padding:10px;" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+        <md-card-actions>
+          <div class="form-group">
+            <label for="dateStart">Soumis après</label>
+            <md-datepicker ng-model="dateStart" md-placeholder="Début"></md-datepicker>
+          </div>
+          <div class="form-group">
+            <label for="dateEnd">Soumis avant</label>
+            <md-datepicker ng-model="dateEnd" md-placeholder="Fin"></md-datepicker>
+          </div>
+          <div ng-click="filterDate()" class="btn btn-primary">Mettre à jour</div>
+        </md-card-actions>
+      </md-card>
+
+      <md-card style="margin-bottom:15px; padding:10px;" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+        <md-card-actions>
+          <label style="margin-bottom:15px;">État</label>
+          <div>
+            <md-checkbox ng-click="toggle(item, selected)">
+              Nouveau
+            </md-checkbox>
+          </div>
+          <div>
+            <md-checkbox ng-click="toggle(item, selected)">
+              En cours de révision
+            </md-checkbox>
+          </div>
+          <div>
+            <md-checkbox ng-click="toggle(item, selected)">
+              Rejeté
+            </md-checkbox>
+          </div>
+          <div>
+            <md-checkbox style="margin-bottom:5px;" ng-click="toggle(item, selected)">
+              Résolu
+            </md-checkbox>
+          </div>
+        </md-card-actions>
+      </md-card>
     </div>
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-no-gutter">
+    <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 col-no-gutter">
       <div id="map_canvas"></div>
     </div>
   </div>
