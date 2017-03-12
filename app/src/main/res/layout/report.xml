@@ -57,7 +57,7 @@
             android:background="@drawable/drop_shadow">
 
             <TextView
-                android:text="Type"
+                android:text="Type:"
                 android:layout_width="69dp"
                 android:layout_height="match_parent"
                 android:id="@+id/Type"
@@ -68,7 +68,9 @@
                 android:shadowColor="#000000"
                 android:shadowDx="2"
                 android:shadowDy="3"
-                android:textColor="@color/cast_libraries_material_featurehighlight_text_body_color" />
+                android:textColor="@color/cast_libraries_material_featurehighlight_text_body_color"
+                android:textSize="18sp"
+                />
 
             <Spinner
                 android:layout_width="299dp"
@@ -84,25 +86,40 @@
                 android:paddingStart="10dp"
                 android:paddingTop="10dp"
                 android:elevation="15dp"
-                android:textColor="@color/cast_libraries_material_featurehighlight_text_body_color"/>
+                android:textColor="@color/cast_libraries_material_featurehighlight_text_body_color"
+                android:background="@drawable/border1"
+                />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingStart="20dp"
         android:background="@color/cast_expanded_controller_ad_label_background_color"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/drop_shadow">
+
+            <TextView
+                android:text="Description:"
+                android:layout_width="match_parent"
+                android:id="@+id/textView"
+                android:textAlignment="center"
+                android:shadowRadius="2"
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="3"
+                android:textColor="@color/cast_libraries_material_featurehighlight_text_body_color"
+                android:textSize="20sp"
+                android:layout_height="30dp" />
 
             <EditText
                 android:hint="Entrez une description"
@@ -112,7 +129,7 @@
                 android:id="@+id/editText2"
                 android:textSize="14sp"
                 android:background="@color/wallet_highlighted_text_holo_dark"
-                android:layout_height="150dp"
+                android:layout_height="110dp"
                 android:paddingLeft="10dp"
                 android:lines="3"
                 android:scrollHorizontally="false"
