@@ -1,0 +1,81 @@
+<style type="text/css">
+  #map_canvas { height: calc(100vh - 50px) }
+  .alert{
+    box-shadow: 0 3px 20px rgba(0,0,0,0.3);
+  }
+</style>
+
+<nav class="navbar navbar-inverse navbar-hackqc navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img src="img/logo-white.png" style="vertical-align:middle; display:inline-block; margin-right:7px; height:100%">
+        <strong>Cartovélo</strong>
+      </a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a style="text-transform: uppercase;" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{city}} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li style="text-transform: uppercase;" ng-repeat="city in cities" ng-click="changeCity(city)" ><a style="color: #333 !important; " href="/#!/view1/{{ city }}">{{ city }}</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/#!/view1/{{ city }}">Voir sous forme de carte</a></li>
+        <li><a href="/#!/view2/{{ city }}">Voir sous forme de liste</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<toast></toast>
+
+<div class="container-fluid" ng-init="initMap()">
+  <div class="row">
+    <div class="col-sm-5 col-md-4 sidebar">
+      <md-card style="margin-bottom:15px; padding:10px;">
+        <md-card-actions>
+          <label style="margin-bottom:15px;">Catégories</label>
+          <md-checkbox style="display:block;" ng-repeat="item in typeItems" ng-change="filterType();" ng-model="filterTypeItems[item.name]">
+            {{item.label}}
+          </md-checkbox>
+        </md-card-actions>
+      </md-card>
+
+      <md-card style="margin-bottom:15px; padding:10px;">
+        <md-card-actions>
+          <div class="form-group">
+            <label for="startDate">Soumis après</label>
+            <md-datepicker ng-model="startDate" ng-change="filterDate();" md-placeholder="Début"></md-datepicker>
+          </div>
+          <div class="form-group">
+            <label for="endDate">Soumis avant</label>
+            <md-datepicker ng-model="endDate" ng-change="filterDate();" md-placeholder="Fin"></md-datepicker>
+          </div>
+        </md-card-actions>
+      </md-card>
+
+      <md-card style="margin-bottom:15px; padding:10px;">
+        <md-card-actions>
+          <label style="margin-bottom:15px;">État</label>
+          <md-checkbox style="display:block;" ng-repeat="item in statusItems" ng-change="filterStatus();" ng-model="filterStatusItems[item.name]">
+            {{item.label}}
+          </md-checkbox>
+        </md-card-actions>
+      </md-card>
+    </div>
+
+    <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 col-no-gutter">
+      <div id="map_canvas"></div>
+    </div>
+  
+  </div>
+</div>

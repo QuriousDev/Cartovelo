@@ -1,0 +1,6 @@
+/* app css stylesheet */
+
+.col-no-gutter {
+    padding-right:0;
+    padding-left:0;
+}
