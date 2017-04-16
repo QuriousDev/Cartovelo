@@ -1,6 +1,6 @@
 # Cartovelo Frontend
 
-This folder contains the code of Cartovelo's admin UI. It is based on [angular-seed][https://github.com/angular/angular-seed], a starter project for Angular-based apps.
+This folder contains the code of Cartovelo's admin UI. It is based on [angular-seed](https://github.com/angular/angular-seed), a starter project for Angular-based apps.
 
 ## How to use
 
