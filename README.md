@@ -4,7 +4,7 @@ Cartovelo is a simple and efficient issue reporting and tracking system for citi
 ## Contributors
 - [Sytten](https://github.com/Sytten)
 - [maximevaillancourt](https://github.com/maximevaillancourt)
-- [pgirard-dev](https://github.com/pgirard-dev)
+- [Philippe Girard](https://github.com/philippegirard)
 - [DonavanMartin](https://github.com/DonavanMartin)
 
 ## Features
